@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 import tla.domain.dto.SentenceDto;
+import tla.domain.dto.SentenceDto.SentenceContext;
 import tla.domain.model.Transcription;
 import tla.domain.model.SentenceToken.Lemmatization;
 import tla.domain.model.meta.BTSeClass;
@@ -23,11 +24,18 @@ import tla.domain.model.meta.TLADTO;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SentenceSearch extends MultiLingSearchCommand<SentenceDto> {
+	
+	 private SentenceContext context;
+
 
     @Getter
     @Setter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class TokenSpec {
+    	
+    	  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    	  private String id;
+    	  
         /**
          * looking for usages of a specific lemma entry.
          */
@@ -60,6 +68,7 @@ public class SentenceSearch extends MultiLingSearchCommand<SentenceDto> {
         @JsonIgnore
         public boolean isEmpty() {
             return (
+            		(this.id==null) &&
                 (this.lemma == null || this.lemma.isEmpty()) &&
                 (this.glyphs == null || this.glyphs.isBlank()) &&
                 (this.transcription == null || this.transcription.isEmpty()) &&
@@ -88,6 +97,8 @@ public class SentenceSearch extends MultiLingSearchCommand<SentenceDto> {
         valueFilter = TypeSpec.EmptyObjectFilter.class
     )
     private TypeSpec type;
+    
+
 
     private PassportSpec passport;
 
